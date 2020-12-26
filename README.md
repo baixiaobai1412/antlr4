@@ -1,3 +1,4 @@
 # Nginx ANTLR4 DEMO
 
-`sh build.sh` and SHIFT+F10
+    cd cmake-build-debug
+    clear;make -j 4  && ./nginx_demo; echo $?
