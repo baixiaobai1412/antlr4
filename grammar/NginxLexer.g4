@@ -1,0 +1,27 @@
+lexer grammar NginxLexer;
+
+
+LOCATION: 'location';
+
+LEFT_OPENING_BRACE: '{';
+RIGTH_OPENING_BRACE: '}';
+
+
+LOWER_STRING_WITH_UNDER_LINE: LOWER_STRING (UNDER_LINE LOWER_STRING)+;
+LOWER_STRING: LOWER_ALPHABET+;
+
+SPACE : ' ';
+STRING_WITH_OTHER:  (LOWER_ALPHABET | UNDER_LINE | NUMBER |SLASH|PLUS|MINUS|DOT | UPPER_ALPHABET | EQUALS_SIGN)+;
+STRING: ALPHABET+ ;
+LOWER_ALPHABET: [a-z];
+UPPER_ALPHABET: [A-Z];
+ALPHABET: [a-zA-Z];
+UNDER_LINE: '_';
+NUMBER: [0-9];
+SLASH: '/';
+PLUS: '+';
+MINUS: '-';
+DOT: '.';
+EQUALS_SIGN: '=';
+S1_DELIMITER : ';'      ; // S1 delimiter
+WS : [\t\r\n]+ -> skip ; // skip spaces, tabs, newlines
