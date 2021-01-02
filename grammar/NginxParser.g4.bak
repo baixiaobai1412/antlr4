@@ -1,0 +1,52 @@
+parser grammar NginxParser;
+options {
+    tokenVocab = NginxLexer;
+}
+
+input: context+;
+
+context: context_name SPACE* context_value
+        |field_group;
+
+context_name: LOWER_STRING ;
+
+context_value: LEFT_OPENING_BRACE
+             (SPACE
+             |field_group
+             |context
+             |location)*
+             RIGTH_OPENING_BRACE;
+
+location: location_left_field
+          op=SPACE location_middle_field
+          op=SPACE location_right_field;
+
+location_left_field: LOCATION;
+location_middle_field: STRING_WITH_OTHER;
+location_right_field: LEFT_OPENING_BRACE
+                    (SPACE|field_group)+
+                    RIGTH_OPENING_BRACE;
+
+
+field_group : fg_left(op=SPACE fg_right)+ SPACE* S1_DELIMITER SPACE*
+            | fg_left op=SPACE fg_right op=SPACE (fg_right_plus|SPACE)+ S1_DELIMITER SPACE*;
+
+fg_left
+       : LOWER_STRING //小写
+       | LOWER_STRING_WITH_UNDER_LINE // 带下划线的小写
+       ;
+
+fg_right
+        :LOWER_STRING //小写
+        |STRING //大小写字符串
+        |LOWER_STRING_WITH_UNDER_LINE
+        |LOWER_STRING_WITH_UNDER_LINE_DOLLAR_QUOTES
+        |STRING_WITH_OTHER //剩下所有可能性
+        ;
+fg_right_plus:QUOTES (SPACE|fg_right_plus_content)+ QUOTES ;
+fg_right_plus_content:LOWER_STRING_WITH_UNDER_LINE_DOLLAR_QUOTES
+                     |MINUS
+                     |LEFT_BRACKETS LOWER_STRING_WITH_UNDER_LINE_DOLLAR_QUOTES RIGTH_BRACKETS
+                     |DOUBLE_QUOTES LOWER_STRING_WITH_UNDER_LINE_DOLLAR_QUOTES DOUBLE_QUOTES
+                     ;
+
